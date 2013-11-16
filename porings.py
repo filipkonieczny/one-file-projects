@@ -185,10 +185,10 @@ while True:
  
  
     # ask the user for the number of porings
-    print("\nHow many porings would you like to see?(1-3)")
+    print("\nHow many porings would you like to see?(1-9)")
    
-    porings_num = ask_for_specific_number("How many porings?(1-3): ",\
-    "Wrong. Please give a number.\n", 1, 3)
+    porings_num = ask_for_specific_number("How many porings?(1-9): ",\
+    "Wrong. Please give a number.\n", 1, 9)
    
    
     # creating porings
@@ -201,10 +201,10 @@ while True:
  
    
     # ask how many moves should be done
-    print("\nHow many moves should every Poring do?(1-100)")
+    print("\nHow many moves should every Poring do?(1-1000)")
    
-    moves_num = ask_for_specific_number("How many moves?(1-100): ", \
-    "Wrong. Please give a number.\n", 1, 100)
+    moves_num = ask_for_specific_number("How many moves?(1-1000): ", \
+    "Wrong. Please give a number.\n", 1, 1000)
    
    
     # making moves
@@ -231,8 +231,8 @@ while True:
        
        
         # clear the board
-        board = []
-        create_board(board_x, board_y, board)
+        #board = []
+        #create_board(board_x, board_y, board)
        
        
         # move porings
