@@ -16,7 +16,7 @@ from pygame.locals import QUIT
 import random
 
 
-# classes TODO
+# classes
 class Poring():
     '''Poring class - allows random movement   
     '''
@@ -39,7 +39,6 @@ class Poring():
         self.previous_color = previous_color
 
 
-    # TODO
     def move(self):
         '''Funtion guarantees "random" movement.
         It's also forbidden to go out of the board
@@ -88,10 +87,10 @@ class Poring():
 
 # variables
 # screen size
-WIDTH = 100
-HEIGHT = 100
+WIDTH = 640
+HEIGHT = 640
 
-porings_count = 1000
+porings_count = 10000
 porings = []
 
 move_count = 0
