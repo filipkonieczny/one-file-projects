@@ -53,8 +53,6 @@ canvas.fill((0, 0, 0))
 
 # printing all pixels
 for i in pixels:
-	print x, y, i
-
 	rect = (120 * x, 120 * y, 120, 120)
 	pygame.draw.rect(canvas, i, rect)
 
