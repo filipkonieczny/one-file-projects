@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 import random
+import time
 
-# documentation at line 98, because I explain everything to the user anyway
+# documentation at line 104, because I explain everything to the user anyway
 # probably not the smartest move, but well... YOLO
 
 
@@ -72,10 +73,12 @@ def add_connection(dot_search, dots_pos, connections):
 
 
 # variables
+accuracy = 100
 max_connections = 0
 connections = []
 paths = {}
 board_display = []
+time_at_start = time.time()
 
 # creating a board
 board = []
@@ -89,7 +92,8 @@ dots_pos = []
 # "#" are the dots, it's just easier to visualize the problem
 problem = '''##
 ###
- ##
+ ###
+  ##
 '''
 
 
@@ -103,7 +107,7 @@ print("It takes a problem, finds various connections paths and prints them.")
 print("The path with the most connections is printed step by step.\n")
 print("Accuracy of this search may vary, depending on the size of the problem.")
 print("Bigger(3x3+) problems may require more insight.")
-print("To change accuracy, set to 1000 by default, go to line 250.")
+print("To change accuracy, set to 100 by default, go to line 76.")
 print("\nEnjoy!\n\n")
 
 # creates the board of the problem
@@ -248,7 +252,7 @@ for starting_pos in dots_pos:
 		foo += 1
 
 		# accuracy
-		if foo >= 1000:
+		if foo >= accuracy * max_connections:
 			break
 
 
@@ -371,4 +375,5 @@ while foo < int(longest_connection):
 	foo += 1
 
 # goodbye message
+print("\nCalculated in %.2f seconds!" % (time.time() - time_at_start))
 print("Thanks for using me!\n\n")
