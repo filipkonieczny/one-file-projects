@@ -90,7 +90,7 @@ class Poring():
 WIDTH = 640
 HEIGHT = 640
 
-porings_count = 10000
+porings_count = 100
 porings = []
 
 move_count = 0
