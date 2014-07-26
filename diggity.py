@@ -508,6 +508,9 @@ def main():
                     pygame.quit()
                     exit()
 
+                if pygame.key.name(event.key) == "r":
+                    main()
+
 
 # variables
 # screen size
