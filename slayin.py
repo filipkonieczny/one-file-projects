@@ -273,8 +273,6 @@ class Medkit():
         if self.y < self.HEIGHT - 80 - self.h:
             self.y += 2
 
-        
-
 
 # functions
 def collision(object1, object2, obj1_type, obj2_type):
@@ -327,15 +325,159 @@ def display_score(time_at_start, score):
     print("\nYou've been playing for %.2f seconds and you've slain %s enemies!!\nThanks for playing!!\n" % (time.time() - time_at_start, score))
 
 
+def main():
+    # variables
+    score = 0
+    enemies = []
+    medkits = []
+    time_playing = 0
+    respawn_time = 0.5
+    flying_enemy_spawn_interval = 0
+    medkit_spawn_interval = 0
+    
 
-# variables
-score = 0
-enemies = []
-medkits = []
-time_playing = 0
-respawn_time = 0.5
-flying_enemy_spawn_interval = 0
-medkit_spawn_interval = 0
+    # create the player
+    player = Player(canvas, WIDTH, HEIGHT, 300, 200, 40, 40, (210, 125, 44), 0, 0, 100, 1, 10)
+    weapon = Weapon(canvas, 340, 210, 40, 15, (117, 113, 97))
+
+
+    canvas.fill((222, 238, 214))
+
+    time_at_start = time.time()
+    current_time = time.time()
+
+
+    # main loop
+    while True:
+        # fill the screen with background color
+        canvas.fill((222, 238, 214))
+
+
+        # spawning enemies
+        if time.time() - current_time >= respawn_time:
+            enemies.append(Enemy(canvas, WIDTH, random.randint(0, WIDTH - 40), HEIGHT, 40, 40, (89, 125, 206), 1))
+            current_time = time.time()
+
+            flying_enemy_spawn_interval += 1
+            if flying_enemy_spawn_interval == 10:
+                flying_enemy_spawn_interval = 0
+                enemies.append(FlyingEnemy(canvas, WIDTH, random.randint(0, WIDTH - 40), -40, 40, 40, (89, 125, 206), 1))
+
+            medkit_spawn_interval += 1
+            if medkit_spawn_interval == 30:
+                medkit_spawn_interval = 0
+                medkits.append(Medkit(canvas, WIDTH, HEIGHT, random.randint(0, WIDTH - 20), -20, 20, 20, (109, 170, 44), 1))
+
+            if score != 0 and score % 10 == 0:
+                if respawn_time > 0.2:
+                    respawn_time -= 0.01
+
+
+        # draw ground
+        rect = (0, 240, 640, 80)
+        pygame.draw.rect(canvas, (20, 18, 28), rect)
+
+
+        # player handling
+        # move player
+        player.move()
+
+        # draw player
+        player.draw(weapon)
+
+        # invulnerability handling
+        player.invulnerability()
+
+
+        # enemies handling
+        for enemy in enemies:
+            # move enemy
+            enemy.move()
+
+            # draw enemy
+            enemy.draw()
+
+
+        # medkits handling
+        for i, medkit in enumerate(medkits):
+            medkit.move()
+
+            medkit.draw()
+
+            # collision detecion
+            collision(medkit, player, "medkit", "player")
+
+            if medkit.health == 0:
+                del medkits[i]
+
+
+        # collision handling
+        # player collides with enemies
+        for i, enemy in enumerate(enemies):
+            collision(enemy, weapon, "enemy", "weapon")
+            collision(enemy, player, "enemy", "player")
+
+            if enemy.health == 0:
+                score += 1
+                print("You've slain an enemy! Your score is %d!" % score)
+                del enemies[i]
+
+
+        # update display
+        display.update()
+
+
+        # if player has no health - stop the game
+        if player.health == 0:
+            break
+
+        # handling events
+        for event in pygame.event.get():
+            # handling movement
+            # left(user presses left arrow)
+            if event.type == 2:
+                if pygame.key.name(event.key) == "left":
+                    player.direction = -1
+
+                # right(user presses right arrow)
+                if pygame.key.name(event.key) == "right":
+                    player.direction = 1
+
+                # jump(user presses space)
+                if pygame.key.name(event.key) == "up":
+                    player.jump()
+
+                # closing the program
+                if  pygame.key.name(event.key) == "escape":
+                    pygame.quit()
+                    exit()
+
+            # handling quit event
+            if event.type is QUIT:
+                display_score(time_at_start, score)
+                pygame.quit()
+                exit()
+
+
+    display_score(time_at_start, score)
+
+
+    while True:
+        for event in pygame.event.get():
+            # handling quit event
+            if event.type is QUIT:
+                pygame.quit()
+                exit()
+
+            # closing the program
+            if event.type == 2:
+                if pygame.key.name(event.key) == "escape":
+                    pygame.quit()
+                    exit()
+
+                if pygame.key.name(event.key) == "r":
+                    main()
+
 
 # screen size
 WIDTH = 640
@@ -349,140 +491,4 @@ canvas = display.set_mode((WIDTH, HEIGHT), 0, 16)
 display.set_caption('Slayin Clone')
 
 
-# create the player
-player = Player(canvas, WIDTH, HEIGHT, 300, 200, 40, 40, (210, 125, 44), 0, 0, 100, 1, 10)
-weapon = Weapon(canvas, 340, 210, 40, 15, (117, 113, 97))
-
-
-canvas.fill((222, 238, 214))
-
-time_at_start = time.time()
-current_time = time.time()
-
-
-# main loop
-while True:
-    # fill the screen with background color
-    canvas.fill((222, 238, 214))
-
-
-    # spawning enemies
-    if time.time() - current_time >= respawn_time:
-        enemies.append(Enemy(canvas, WIDTH, random.randint(0, WIDTH - 40), HEIGHT, 40, 40, (89, 125, 206), 1))
-        current_time = time.time()
-
-        flying_enemy_spawn_interval += 1
-        if flying_enemy_spawn_interval == 10:
-            flying_enemy_spawn_interval = 0
-            enemies.append(FlyingEnemy(canvas, WIDTH, random.randint(0, WIDTH - 40), -40, 40, 40, (89, 125, 206), 1))
-
-        medkit_spawn_interval += 1
-        if medkit_spawn_interval == 30:
-            medkit_spawn_interval = 0
-            medkits.append(Medkit(canvas, WIDTH, HEIGHT, random.randint(0, WIDTH - 20), -20, 20, 20, (109, 170, 44), 1))
-
-        if score != 0 and score % 10 == 0:
-            if respawn_time > 0.2:
-                respawn_time -= 0.01
-
-
-    # draw ground
-    rect = (0, 240, 640, 80)
-    pygame.draw.rect(canvas, (20, 18, 28), rect)
-
-
-    # player handling
-    # move player
-    player.move()
-
-    # draw player
-    player.draw(weapon)
-
-    # invulnerability handling
-    player.invulnerability()
-
-
-    # enemies handling
-    for enemy in enemies:
-        # move enemy
-        enemy.move()
-
-        # draw enemy
-        enemy.draw()
-
-
-    # medkits handling
-    for i, medkit in enumerate(medkits):
-        medkit.move()
-
-        medkit.draw()
-
-        # collision detecion
-        collision(medkit, player, "medkit", "player")
-
-        if medkit.health == 0:
-            del medkits[i]
-
-
-    # collision handling
-    # player collides with enemies
-    for i, enemy in enumerate(enemies):
-        collision(enemy, weapon, "enemy", "weapon")
-        collision(enemy, player, "enemy", "player")
-
-        if enemy.health == 0:
-            score += 1
-            print("You've slain an enemy! Your score is %d!" % score)
-            del enemies[i]
-
-
-    # update display
-    display.update()
-
-
-    # if player has no health - stop the game
-    if player.health == 0:
-        break
-
-    # handling events
-    for event in pygame.event.get():
-        # handling movement
-        # left(user presses left arrow)
-        if event.type == 2:
-            if pygame.key.name(event.key) == "left":
-                player.direction = -1
-
-            # right(user presses right arrow)
-            if pygame.key.name(event.key) == "right":
-                player.direction = 1
-
-            # jump(user presses space)
-            if pygame.key.name(event.key) == "up":
-                player.jump()
-
-            # closing the program
-            if  pygame.key.name(event.key) == "escape":
-                pygame.quit()
-                exit()
-
-        # handling quit event
-        if event.type is QUIT:
-            pygame.quit()
-            exit()
-
-
-display_score(time_at_start, score)
-
-
-while True:
-    for event in pygame.event.get():
-        # handling quit event
-        if event.type is QUIT:
-            pygame.quit()
-            exit()
-
-        # closing the program
-        if event.type == 2:
-            if  pygame.key.name(event.key) == "escape":
-                pygame.quit()
-                exit()
+main()
