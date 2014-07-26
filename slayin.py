@@ -323,6 +323,11 @@ def collision(object1, object2, obj1_type, obj2_type):
                     print("You've obtained a medkit! %d lives left!" % object1.health)
 
 
+def display_score(time_at_start, score):
+    print("\nYou've been playing for %.2f seconds and you've slain %s enemies!!\nThanks for playing!!\n" % (time.time() - time_at_start, score))
+
+
+
 # variables
 score = 0
 enemies = []
@@ -466,8 +471,8 @@ while True:
             exit()
 
 
-print("\nYou've been playing for %.2f seconds and you've slain %s enemies!!\nThanks for playing!!\n" % (time.time() - time_at_start, score))
-print len(enemies)
+display_score(time_at_start, score)
+
 
 while True:
     for event in pygame.event.get():
