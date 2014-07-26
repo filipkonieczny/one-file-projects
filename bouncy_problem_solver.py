@@ -93,7 +93,8 @@ dots_pos = []
 problem = ''' ##
 ####
 ####
- ##'''
+ ##
+'''
 
 
 # main
@@ -251,11 +252,7 @@ for starting_pos in dots_pos:
 		foo += 1
 
 		# accuracy
-<<<<<<< HEAD
-		if foo >= 10000:
-=======
 		if foo >= accuracy * max_connections:
->>>>>>> c44273946d58f5972bea32299b2313fe95e98768
 			break
 
 
