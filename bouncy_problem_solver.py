@@ -87,8 +87,9 @@ dots_pos = []
 
 # taking a problem(max size 9x9, honestly bigger than 6x6 make no sense)
 # "#" are the dots, it's just easier to visualize the problem
-problem = '''##
-###
+problem = ''' ##
+####
+####
  ##
 '''
 
@@ -248,7 +249,7 @@ for starting_pos in dots_pos:
 		foo += 1
 
 		# accuracy
-		if foo >= 1000:
+		if foo >= 10000:
 			break
 
 
