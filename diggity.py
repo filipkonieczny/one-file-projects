@@ -371,6 +371,13 @@ def sort_board(board, player_x, player_y):
         board[31][i] = Block(random.randint(2, 25))
 
 
+def display_score(time_at_start, score, depth):
+    print("\n\nYou've been playing for %.2f seconds." % (time.time() - time_at_start))
+    print("Your score: %d." % score)
+    print("Your depth: %d." % depth)
+    print("\nThanks for playing!")
+
+
 def main():
     '''
     Main function of the game.
@@ -462,11 +469,13 @@ def main():
 
                 # closing the program
                 if  pygame.key.name(event.key) == "escape":
+                    display_score(time_at_start, hud.score, hud.depth)
                     pygame.quit()
                     exit()
 
             # handling quit event
             if event.type is QUIT:
+                display_score(time_at_start, hud.score, hud.depth)
                 pygame.quit()
                 exit()
 
@@ -488,10 +497,7 @@ def main():
 
 
     # display end game stats(time played, score, depth)
-    print("\n\nYou've been playing for %.2f seconds." % (time.time() - time_at_start))
-    print("Your score: %d." % hud.score)
-    print("Your depth: %d." % hud.depth)
-    print("\nThanks for playing!")
+    display_score(time_at_start, hud.score, hud.depth)
 
 
     # handling closing of the game after the user has lost
