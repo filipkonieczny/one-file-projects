@@ -9,13 +9,14 @@
 
 
 # imports
+import random
+import time
+
 import pygame
+
 from pygame import display
 from pygame import key
 from pygame.locals import QUIT
-
-import random
-import time
 
 
 # classes
@@ -322,7 +323,9 @@ def collision(object1, object2, obj1_type, obj2_type):
 
 
 def display_score(time_at_start, score):
-    print("\nYou've been playing for %.2f seconds and you've slain %s enemies!!\nThanks for playing!!\n" % (time.time() - time_at_start, score))
+    time_played = "%.2f" % (time.time() - time_at_start)
+    score_message = "\nYou've been playing for {0} seconds and you've slain {1} enemies!!\nThanks for playing!!\n"
+    print(score_message.format(time_played, score))
 
 
 def main():
@@ -340,13 +343,9 @@ def main():
     player = Player(canvas, WIDTH, HEIGHT, 300, 200, 40, 40, (210, 125, 44), 0, 0, 100, 1, 10)
     weapon = Weapon(canvas, 340, 210, 40, 15, (117, 113, 97))
 
-
-    canvas.fill((222, 238, 214))
-
     time_at_start = time.time()
     current_time = time.time()
     prev_frame_time = time.time()
-    current_frame_time = time.time()
 
 
     # main loop
@@ -456,6 +455,7 @@ def main():
 
                     # closing the program
                     if  pygame.key.name(event.key) == "escape":
+                        display_score(time_at_start, score)
                         pygame.quit()
                         exit()
 
@@ -489,7 +489,7 @@ def main():
 # screen size
 WIDTH = 640
 HEIGHT = 320
-FPS = 30.0
+FPS = 60.0
 
 # main
 # setup pygame
