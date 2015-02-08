@@ -15,7 +15,6 @@
 # imports
 import pygame
 from pygame import display
-from pygame import key
 from pygame.locals import QUIT
 
 import random
@@ -40,14 +39,13 @@ class Player:
         Constructor.
 
         x, y - information about current position(x, y) on the board
-        current_time - used to determine whether the user can move 
+        current_time - used to determine whether the user can move
 
         '''
 
         self.current_time = 0
         self.x = x
         self.y = y
-
 
     def _move(self, board, x_dir, y_dir, hud):
         '''
@@ -80,7 +78,6 @@ class Player:
                 sort_board(board, self.x, self.y)
                 hud.depth += 1
 
-
     def move(self, board, direction, hud):
         '''
         This function decides what kind of move to perform based on direction.
@@ -104,7 +101,6 @@ class Player:
             else:
                 self._move(board, 0, 1, hud)
 
-
     def skill(self, board, hud):
         '''
         Upon pressing spacebar special skill is activated.
@@ -112,7 +108,6 @@ class Player:
         Special skill weakens everything on the current depth by 1 level.
 
         '''
-
 
         # weaken everything on the current self.y depth
         for i in board[self.y]:
@@ -135,7 +130,6 @@ class Block:
     destroy - lowers block's attributes, takes care of any corresponding action
 
     '''
-
 
     def __init__(self, block):
         '''
@@ -179,11 +173,8 @@ class Block:
         else:
             block_type = "player"
 
-
         self.type = block_type
-
         self._update()
-
 
     def draw_block(self, x, y):
         '''
@@ -197,7 +188,6 @@ class Block:
             rect = (4 * SCALE + y * SCALE, x * SCALE, SCALE, SCALE)
 
             pygame.draw.rect(canvas, self.colors, rect)
-
 
     def _update(self):
         '''
@@ -233,7 +223,6 @@ class Block:
         else:
             self.colors = (109, 170, 44)
 
-
     def destroy(self, hud):
         '''
         'Destroys' the block, meaning it takes care of it's current state.
@@ -267,7 +256,6 @@ class Block:
             hud.score += 3
             self.type = "hard rock"
 
-
         # update block's state
         self._update()
 
@@ -300,7 +288,6 @@ class Hud:
         self.score = 0
         self.depth = 0
 
-
     def draw(self):
         '''
         Draws the bars and handles their current state(time and power).
@@ -310,7 +297,6 @@ class Hud:
         # reset the value of time - maximum can be 16
         if self.time > 16:
             self.time = 16
-
 
         if time.time() - self.current_time >= 1:
             self.current_time = time.time()
@@ -328,12 +314,9 @@ class Hud:
             sinx = math.sin(10 * time.time())
             alpha = (3 + sinx) / 4
 
-
         red_color = int(round(208 * alpha))
         colors = (red_color, 70, 72)
-
         pygame.draw.rect(canvas, colors, rect)
-
 
         # display power bar on the right side
         if self.power_factor < HEIGHT:
@@ -385,13 +368,11 @@ def main():
 
     '''
 
-
     # declare variables
     time_at_start = time.time()
     current_time = time.time()
     score = 0
     depth = 0
-
 
     # setup the game
     # create the environment
@@ -400,7 +381,6 @@ def main():
     for i in range(32):
         board[i] = [2] * 24
 
-
     # fill the environment
     for i, row in enumerate(board):
         for i2 in range(len(board[i])):
@@ -408,27 +388,22 @@ def main():
             # more information about block types generation in Block class
             board[i][i2] = Block(random.randint(2, 25))
 
-
     # clean up the space at the beginning
     for i in range(2):
         for j in range(24):
             board[i][j] = Block(1)
 
-
     # place the player
     board[1][12] = Block(0)
     player = Player(12, 1)
 
-
     # create hud
     hud = Hud()
-
 
     # main loop
     while True:
         # fill the screen with background color
         canvas.fill((222, 238, 214))
-
 
         # draw left and right sidebars
         # left
@@ -439,23 +414,19 @@ def main():
         rect = (WIDTH - (4 * SCALE), 0, 4 * SCALE, 32 * SCALE)
         pygame.draw.rect(canvas, (20, 18, 28), rect)
 
-
         # display hud
         if hud.time == 0:
             break
 
         hud.draw()
 
-
         # display content
         for i, row in enumerate(board):
             for j, block in enumerate(row):
                 block.draw_block(i, j)
 
-
         # update display
         display.update()
-
 
         # handling events
         for event in pygame.event.get():
@@ -468,7 +439,7 @@ def main():
                         player.skill(board, hud)
 
                 # closing the program
-                if  pygame.key.name(event.key) == "escape":
+                if pygame.key.name(event.key) == "escape":
                     display_score(time_at_start, hud.score, hud.depth)
                     pygame.quit()
                     exit()
@@ -478,7 +449,6 @@ def main():
                 display_score(time_at_start, hud.score, hud.depth)
                 pygame.quit()
                 exit()
-
 
         # detecting player interaction
         keys = pygame.key.get_pressed()
@@ -495,10 +465,8 @@ def main():
         if keys[pygame.K_DOWN]:
             player.move(board, 0, hud)
 
-
     # display end game stats(time played, score, depth)
     display_score(time_at_start, hud.score, hud.depth)
-
 
     # handling closing of the game after the user has lost
     while True:
@@ -510,7 +478,7 @@ def main():
 
             # closing the program via keyboard
             if event.type == 2:
-                if  pygame.key.name(event.key) == "escape":
+                if pygame.key.name(event.key) == "escape":
                     pygame.quit()
                     exit()
 
