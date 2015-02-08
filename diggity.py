@@ -370,9 +370,6 @@ def main():
 
     # declare variables
     time_at_start = time.time()
-    current_time = time.time()
-    score = 0
-    depth = 0
 
     # setup the game
     # create the environment
