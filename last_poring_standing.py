@@ -18,7 +18,7 @@ import random
 
 # classes
 class Poring():
-    '''Poring class - allows random movement   
+    '''Poring class - allows random movement
     '''
 
     def __init__(self, canvas, WIDTH, HEIGHT, x, y, w, h, color_rgb, previous_color):
@@ -116,7 +116,7 @@ canvas.fill((0, 0, 0))
 while True:
     # draw objects
     poring_positions = []
-    
+
     for poring in porings:
         poring.draw_white()
         poring.move()
