@@ -15,7 +15,6 @@ import time
 import pygame
 
 from pygame import display
-from pygame import key
 from pygame.locals import QUIT
 
 
@@ -47,7 +46,6 @@ class Player():
 
         self.invulnerable = 0
 
-
     def draw(self, weapon):
         '''This function simply draws a rectangle that represents player's position,
         as well as his weapon.
@@ -66,7 +64,6 @@ class Player():
             weapon.y = self.y + 10
             weapon.draw()
 
-
     def move(self):
         '''This function allows the player to move based on desired direction
         '''
@@ -77,7 +74,6 @@ class Player():
 
         if self.direction > 0 and self.x + self.w < self.WIDTH:
             self.x += 3 * self.direction
-
 
         # moving vertically
         self.y += 8 * self.jump_direction * self.gravity
@@ -91,14 +87,10 @@ class Player():
         if self.gravity <= 0.3:
             self.jump_direction *= -1
 
-
         if self.y >= 200:
             self.jump_direction = 0
             self.y = 200
             self.gravity = 2
-
-
-
 
     def jump(self):
         '''This function allows the player to jump
@@ -107,7 +99,6 @@ class Player():
         # if player is on the ground - he can jump
         if self.y + self.h == 240:
             self.jump_direction = -1
-
 
     def invulnerability(self):
         '''After being hit by an enemy the player is invulnerable for a period of time
@@ -134,7 +125,6 @@ class Weapon():
         self.w = w
         self.h = h
         self.color = color
-
 
     def draw(self):
         '''This function draws the weapon in front of the player.
@@ -167,14 +157,12 @@ class Enemy():
         self.move_interval = 1.5
         self.direction = 0
 
-
     def draw(self):
         '''This function simply draws a rectangle that represents an enemy.
         '''
 
         rect = (self.x, self.y, self.w, self.h)
         pygame.draw.rect(self.canvas, self.color, rect)
-
 
     def move(self):
         '''This function takes care of enemy's movement(including spawning).
@@ -224,13 +212,11 @@ class FlyingEnemy(Enemy):
 
                 self.descend_level = 40
 
-
         # moving vertically
         if self.descend_level > 0:
             if self.y < 200:
                 self.y += 1
                 self.descend_level -= 1
-
 
         # moving horizontally
         if self.direction < 0 and self.x > 0:
@@ -258,14 +244,12 @@ class Medkit():
         self.color = color
         self.health = health
 
-
     def draw(self):
         '''This function draws a medkit.
         '''
 
         rect = (self.x, self.y, self.w, self.h)
         pygame.draw.rect(self.canvas, self.color, rect)
-
 
     def move(self):
         '''Medkit falls from the sky and stops when hits the ground.
@@ -281,7 +265,7 @@ def collision(object1, object2, obj1_type, obj2_type):
     '''
 
     if object1.x + object1.w > object2.x and object2.x + object2.w > object1.x and \
-        object1.y + object1.h > object2.y and object2.y + object2.h > object1.y:
+       object1.y + object1.h > object2.y and object2.y + object2.h > object1.y:
 
         # collision for enemies(they collide with player and weapons)
         if obj1_type == "enemy" or obj2_type == "enemy":
@@ -337,7 +321,6 @@ def main():
     respawn_time = 0.5
     flying_enemy_spawn_interval = 0
     medkit_spawn_interval = 0
-    
 
     # create the player
     player = Player(canvas, WIDTH, HEIGHT, 300, 200, 40, 40, (210, 125, 44), 0, 0, 100, 1, 10)
@@ -347,17 +330,15 @@ def main():
     current_time = time.time()
     prev_frame_time = time.time()
 
-
     # main loop
     while True:
         current_frame_time = time.time()
-        
+
         if (current_frame_time - prev_frame_time) >= (1.0 / FPS):
             prev_frame_time = time.time()
 
             # fill the screen with background color
             canvas.fill((222, 238, 214))
-
 
             # spawning enemies
             if time.time() - current_time >= respawn_time:
@@ -378,11 +359,9 @@ def main():
                     if respawn_time > 0.2:
                         respawn_time -= 0.01
 
-
             # draw ground
             rect = (0, 240, 640, 80)
             pygame.draw.rect(canvas, (20, 18, 28), rect)
-
 
             # player handling
             # move player
@@ -394,7 +373,6 @@ def main():
             # invulnerability handling
             player.invulnerability()
 
-
             # enemies handling
             for enemy in enemies:
                 # move enemy
@@ -402,7 +380,6 @@ def main():
 
                 # draw enemy
                 enemy.draw()
-
 
             # medkits handling
             for i, medkit in enumerate(medkits):
@@ -416,7 +393,6 @@ def main():
                 if medkit.health == 0:
                     del medkits[i]
 
-
             # collision handling
             # player collides with enemies
             for i, enemy in enumerate(enemies):
@@ -428,10 +404,8 @@ def main():
                     print("You've slain an enemy! Your score is %d!" % score)
                     del enemies[i]
 
-
             # update display
             display.update()
-
 
             # if player has no health - stop the game
             if player.health == 0:
@@ -454,7 +428,7 @@ def main():
                         player.jump()
 
                     # closing the program
-                    if  pygame.key.name(event.key) == "escape":
+                    if pygame.key.name(event.key) == "escape":
                         display_score(time_at_start, score)
                         pygame.quit()
                         exit()
@@ -465,9 +439,7 @@ def main():
                     pygame.quit()
                     exit()
 
-
     display_score(time_at_start, score)
-
 
     while True:
         for event in pygame.event.get():
